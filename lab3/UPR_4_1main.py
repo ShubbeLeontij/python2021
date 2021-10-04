@@ -7,7 +7,7 @@ def ell(screen, color, x0, y0, size, angle):
     """
     Draws tilted ellipse
     screen - pygame.Surface object
-    color - color; RGB tuple, for ex. (0, 0, 0) is black
+    color - color; RGB tuple (for ex. (255, 0, 0) is red) or pygame.Color object
     x0, y0 - ellipse coordinates
     size - ellipse size
     angle - angle of tilt
@@ -25,7 +25,7 @@ def stick(screen, color, x, y, n, size, angle):
     """
     Draws stick
     screen - pygame.Surface object
-    color - stick color; RGB tuple, for ex. (0, 0, 0) is black
+    color - stick color; RGB tuple (for ex. (255, 0, 0) is red) or pygame.Color object
     x, y - stick coordinates
     n - number of ellipses in one stick
     size - stick size
@@ -45,11 +45,11 @@ def stick(screen, color, x, y, n, size, angle):
             x[1] + (y[1] - x[1]) * (0.5 * abs((b - 1)) / 2 + k / n / 2), size, angle)
 
 
-def bamboo(screen, color, x=200, y=225, size=15):
+def bamboo(screen, color, x, y, size):
     """
     Draws bamboo
     screen - pygame.Surface object
-    color - bamboo color; RGB tuple, for ex. (0, 0, 0) is black
+    color - bamboo color; RGB tuple (for ex. (255, 0, 0) is red) or pygame.Color object
     x, y - bamboo coordinates
     size - bamboo size
     """
@@ -65,11 +65,11 @@ def bamboo(screen, color, x=200, y=225, size=15):
     stick(screen, color, [x + size * 14 / 3, y - size * 5 / 3], [x + size * 4 / 3, y + size / 3], 3, 1, 30)
 
 
-def panda(screen, color_1, color_2, x=600, y=300, size=25):
+def panda(screen, color_1, color_2, x, y, size):
     """
     Draws cute panda
     screen - pygame.Surface object
-    color_1, color_2 - colors of different parts of panda; RGB tuple, for ex. (0, 0, 0) is black
+    color_1, color_2 - colors of different parts of panda; RGB tuple (for ex. (255, 0, 0) is red) or pygame.Color object
     x, y - panda coordinates
     size - panda size
     """
