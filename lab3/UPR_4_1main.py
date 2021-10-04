@@ -1,24 +1,36 @@
 import pygame
-import turtle
+from pygame.draw import *
 import math
 
-pygame.init()
 
-FPS = 30
-screen = pygame.display.set_mode((1000, 500))
-
-pygame.draw.rect(screen, (255, 160, 110), (0, 0, 1000, 500))
-
-
-def ell(x0, y0, s, angle): ## (x cord, y cord, size, angle)
-    a = []
+def ell(screen, color, x0, y0, size, angle):
+    """
+    Draws tilted ellipse
+    screen - pygame.Surface object
+    color - color; RGB tuple, for ex. (0, 0, 0) is black
+    x0, y0 - ellipse coordinates
+    size - ellipse size
+    angle - angle of tilt
+    """
     for k in range(0, 100):
-        pygame.draw.circle(screen, (0, 100, 0), (x0 + s * 20 * math.sin(angle / 180 * math.pi) * k / 100, y0 + s * 20 * math.cos(angle / 180 * math.pi) * k / 100), 2 * s * (1 + 1 * (k / 100) ** 0.8), width=0)
-    for k in range(0, 100):
-        pygame.draw.circle(screen, (0, 100, 0), (x0 + s * 20 * math.sin(angle / 180 * math.pi) * (1 + k / 100), y0 + s * 20 * math.cos(angle / 180 * math.pi) * (1 + k / 100)), 2* s * (2 - (k / 100) ** 1.25), width=0)
+        circle(screen, color, (x0 + size * 20 * math.sin(angle / 180 * math.pi) * k / 100,
+                               y0 + size * 20 * math.cos(angle / 180 * math.pi) * k / 100),
+               2 * size * (1 + 1 * (k / 100) ** 0.8), width=0)
+        circle(screen, color, (x0 + size * 20 * math.sin(angle / 180 * math.pi) * (1 + k / 100),
+                               y0 + size * 20 * math.cos(angle / 180 * math.pi) * (1 + k / 100)),
+               2 * size * (2 - (k / 100) ** 1.25), width=0)
 
 
-def stick(x, y, n, s, angle): ## (1st cord, 2nd cord, num_elip, angle)
+def stick(screen, color, x, y, n, size, angle):
+    """
+    Draws stick
+    screen - pygame.Surface object
+    color - stick color; RGB tuple, for ex. (0, 0, 0) is black
+    x, y - stick coordinates
+    n - number of ellipses in one stick
+    size - stick size
+    angle - angle of tilt
+    """
     a = []
     b = 1
     if x[0] < y[0]:
@@ -27,87 +39,82 @@ def stick(x, y, n, s, angle): ## (1st cord, 2nd cord, num_elip, angle)
         b = b * (-1)
     for k in range(1, 101):
         a.append((x[0] + k / 100 * (y[0] - x[0]), x[1] + ((k / 100) ** (2 ** b)) * (y[1] - x[1])))
-    pygame.draw.lines(screen, (0, 100, 0), False, a, width=2)
-    for k in range(0, n ):
-        ell(x[0] + (y[0] - x[0]) * (0.5 * abs((b - 1)) / 2 + k / n / 2), x[1] + (y[1] - x[1]) * (0.5 * abs((b - 1)) / 2 + k / n / 2), s, angle)
-        
-pygame.draw.rect(screen, (0, 100, 0), (200, 315, 15, 70))
-pygame.draw.rect(screen, (0, 100, 0), (200, 225, 15, 80))
-pygame.draw.polygon(screen, (0, 100, 0), [(210, 215), (200, 210), (205, 160), (215, 165)])
-pygame.draw.polygon(screen, (0, 100, 0), [(215, 155), (210, 152), (217, 80), (222, 83)])
-stick([135, 200], [195, 230], 3, 1, -30)
-stick([320, 100], [220, 180], 5, 1, 30)
-stick([135, 100], [195, 150], 5, 1, -30)
-stick([270, 200], [220, 230], 3, 1, 30)
-        
-pygame.draw.rect(screen, (0, 100, 0), (400, 315, 15, 90))
-pygame.draw.rect(screen, (0, 100, 0), (400, 225, 15, 80))
-pygame.draw.polygon(screen, (0, 100, 0), [(410, 215), (400, 210), (405, 160), (415, 165)])
-pygame.draw.polygon(screen, (0, 100, 0), [(415, 155), (410, 152), (417, 80), (422, 83)])
-stick([335, 200], [395, 230], 3, 1, -30)
-stick([520, 100], [420, 180], 5, 1, 30)
-stick([335, 100], [395, 150], 5, 1, -30)
-stick([470, 200], [420, 230], 3, 1, 30)
-
-pygame.draw.rect(screen, (0, 100, 0), (600, 295, 25, 90))
-pygame.draw.rect(screen, (0, 100, 0), (600, 205, 25, 80))
-pygame.draw.polygon(screen, (0, 100, 0), [(610, 195), (600, 190), (610, 140), (620, 145)])
-pygame.draw.polygon(screen, (0, 100, 0), [(615, 135), (610, 132), (627, 50), (632, 53)])
-stick([455, 150], [595, 230], 3, 1.5, -30)
-stick([780, 50], [620, 160], 5, 1.5, 30)
-stick([435, 30], [595, 110], 5, 1.5, -30)
-stick([770, 150], [640, 210], 3, 1.5, 30)
-
-pygame.draw.rect(screen, (0, 100, 0), (800, 315, 15, 90))
-pygame.draw.rect(screen, (0, 100, 0), (800, 225, 15, 80))
-pygame.draw.polygon(screen, (0, 100, 0), [(810, 215), (800, 210), (805, 160), (815, 165)])
-pygame.draw.polygon(screen, (0, 100, 0), [(815, 155), (810, 152), (817, 80), (822, 83)])
-stick([735, 200], [795, 230], 3, 1, -30)
-stick([920, 100], [820, 180], 5, 1, 30)
-stick([735, 100], [795, 150], 5, 1, -30)
-stick([870, 200], [820, 230], 3, 1, 30)
-
-pygame.draw.ellipse(screen, (255, 255, 255), (650, 250, 250, 170))
-pygame.draw.ellipse(screen, (0, 0, 0), (840, 330, 50, 120))
-pygame.draw.circle(screen, (0, 0, 0), (850, 430), 25)
-pygame.draw.polygon(screen, (0, 0, 0), [(845, 350), (860, 440), (825, 430) ])
+    lines(screen, color, False, a, width=2)
+    for k in range(0, n):
+        ell(screen, color, x[0] + (y[0] - x[0]) * (0.5 * abs((b - 1)) / 2 + k / n / 2),
+            x[1] + (y[1] - x[1]) * (0.5 * abs((b - 1)) / 2 + k / n / 2), size, angle)
 
 
+def bamboo(screen, color, x=200, y=225, size=15):
+    """
+    Draws bamboo
+    screen - pygame.Surface object
+    color - bamboo color; RGB tuple, for ex. (0, 0, 0) is black
+    x, y - bamboo coordinates
+    size - bamboo size
+    """
+    rect(screen, color, (x, y + size * 6, size, size * 14 / 3))
+    rect(screen, color, (x, y, size, size * 16 / 3))
+    polygon(screen, color, [(x + size * 2 / 3, y - size * 2 / 3), (x, y - size),
+                            (x + size / 3, y - size * 13 / 3), (x + size, y - size * 14 / 3)])
+    polygon(screen, color, [(x + size, y - size * 14 / 3), (x + size * 2 / 3, y - size * 73 / 15),
+                            (x + size * 17 / 15, y - size * 29 / 3), (x + size * 22 / 15, y - size * 142 / 15)])
+    stick(screen, color, [x - size * 13 / 3, y - size * 5 / 3], [x - size * 1 / 3, y + size / 3], 3, 1, -30)
+    stick(screen, color, [x + size * 24 / 3, y - size * 25 / 3], [x + size * 4 / 3, y - size * 3], 5, 1, 30)
+    stick(screen, color, [x - size * 13 / 3, y - size * 25 / 3], [x - size * 1 / 3, y - size * 5], 5, 1, -30)
+    stick(screen, color, [x + size * 14 / 3, y - size * 5 / 3], [x + size * 4 / 3, y + size / 3], 3, 1, 30)
 
-pygame.draw.polygon(screen, (0, 0, 0), [(820, 250),(820, 400), (780, 430), (750, 457), (735, 400), (760, 370)])
-pygame.draw.circle(screen, (0, 0, 0), (740, 430), 30)
 
-pygame.draw.ellipse(screen, (0, 0, 0), (640, 270, 80, 180))
+def panda(screen, color_1, color_2, x=600, y=300, size=25):
+    """
+    Draws cute panda
+    screen - pygame.Surface object
+    color_1, color_2 - colors of different parts of panda; RGB tuple, for ex. (0, 0, 0) is black
+    x, y - panda coordinates
+    size - panda size
+    """
+    ellipse(screen, color_2, (x + size * 2, y - size * 2, size * 10, size * 34 / 5))
+    ellipse(screen, color_1, (x + size / 25 * 240, y + size / 25 * 30, size * 2, size * 24 / 5))
+    circle(screen, color_1, (x + size / 25 * 250, y + size / 25 * 130), size)
+    polygon(screen, color_1, [(x + size / 25 * 245, y + size * 2), (x + size / 25 * 260, y + size / 25 * 140),
+                              (x + size / 25 * 225, y + size / 25 * 130)])
+    polygon(screen, color_1, [(x + size / 25 * 220, y - size * 2), (x + size / 25 * 220, y + size / 25 * 100),
+                              (x + size / 25 * 180, y + size / 25 * 130), (x + size / 25 * 150, y + size / 25 * 157),
+                              (x + size / 25 * 135, y + size / 25 * 100), (x + size / 25 * 160, y + size / 25 * 70)])
+    circle(screen, color_1, (x + size / 25 * 140, y + size / 25 * 130), size * 6 / 5)
+    ellipse(screen, color_1, (x + size / 25 * 40, y - size / 25 * 30, size * 16 / 5, size * 36 / 5))
+    ellipse(screen, color_2, (x + size / 25 * 30, y - size / 25 * 80, size * 32 / 5, size * 36 / 5))
+    polygon(screen, color_2, [(x + size / 25 * 190, y + size / 25 * 10), (x + size / 25 * 190, y + size * 2),
+                              (x + size / 25 * 170, y + size / 25 * 80), (x + size / 25 * 110, y + size / 25 * 100)])
+    polygon(screen, color_1, [(x + size / 25 * 70, y - size / 25 * 60), (x + size / 25 * 30, y - size),
+                              (x + size / 25 * 20, y - size * 2), (x + size * 2, y - size / 25 * 70)])
+    ellipse(screen, color_1, (x + size / 25 * 150, y - size / 25 * 70, size * 8 / 5, size * 14 / 5))
+    ellipse(screen, color_1, (x + size * 2, y + size / 25 * 65, size * 8 / 5, size))
+    circle(screen, color_1, (x + size / 25 * 60, y + size / 25 * 30), size * 4 / 5)
+    circle(screen, color_1, (x + size / 25 * 110, y + size / 25 * 30), size * 4 / 5)
 
-pygame.draw.ellipse(screen, (255, 255, 255), (630, 220, 160, 180))
-pygame.draw.polygon(screen, (255, 255, 255), [(790, 310), (790, 350), (770, 380), (710, 400)] )
 
-pygame.draw.polygon(screen, (0, 0, 0), [(670, 240), (630, 275), (620, 250), (650, 230)])
-pygame.draw.ellipse(screen, (0, 0, 0), (750, 230, 40, 70))
-pygame.draw.ellipse(screen, (0, 0, 0), (650, 365, 40, 25))
-pygame.draw.circle(screen, (0, 0, 0), (660, 330), 20)
-pygame.draw.circle(screen, (0, 0, 0), (710, 330), 20)
+pygame.init()
 
+FPS = 30
+screen = pygame.display.set_mode((1000, 500))
+GREEN = (0, 100, 0)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+PINK = (255, 160, 110)
 
+# draw background
+rect(screen, PINK, (0, 0, 1000, 500))
 
-####
+# draw 4 bamboo
+bamboo(screen, GREEN, 200, 225, 15)
+bamboo(screen, GREEN, 400, 225, 15)
+bamboo(screen, GREEN, 800, 225, 15)
+bamboo(screen, GREEN, 600, 225, 20)
 
-pygame.draw.ellipse(screen, (255, 255, 255), (510, 400, 100, 70))
-pygame.draw.ellipse(screen, (0, 0, 0), (590, 430, 20, 50))
-pygame.draw.circle(screen, (0, 0, 0), (595, 475), 10)
-
-pygame.draw.polygon(screen, (0, 0, 0), [(560, 410),(560, 480), (540, 490), (530, 470)])
-pygame.draw.circle(screen, (0, 0, 0), (545, 475), 15)
-
-pygame.draw.ellipse(screen, (0, 0, 0), (500, 420, 25, 70))
-
-pygame.draw.ellipse(screen, (255, 255, 255), (485, 390, 70, 70))
-
-pygame.draw.polygon(screen, (0, 0, 0), [(510, 405), (485, 415), (490, 400), (500, 390)])
-pygame.draw.ellipse(screen, (0, 0, 0), (540, 400, 15, 30))
-pygame.draw.ellipse(screen, (0, 0, 0), (500, 450, 20, 10))
-pygame.draw.circle(screen, (0, 0, 0), (500, 440), 10)
-pygame.draw.circle(screen, (0, 0, 0), (520, 440), 10)
+# draw one big and one small panda
+panda(screen, BLACK, WHITE, 600, 300, 25)
+panda(screen, BLACK, WHITE, 490, 420, 10)
 
 pygame.display.update()
 clock = pygame.time.Clock()
